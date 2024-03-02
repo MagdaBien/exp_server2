@@ -11,13 +11,12 @@ router.route("/testimonials/random").get((req, res) => {
 });
 
 router.route("/testimonials/:id").get((req, res) => {
-  db.testimonials.forEach((ob) => {
-    if (ob.id == req.params.id) {
-      return res.json(ob);
-    } else {
-      return res.send("There is no such id element");
-    }
-  });
+  const db2 = db.testimonials.filter((item) => item.id == req.params.id);
+  if (db2.length > 0) {
+    res.json(db2);
+  } else {
+    res.send("There is no such id element");
+  }
 });
 
 router.route("/testimonials").get((req, res) => {
@@ -32,20 +31,24 @@ router.route("/testimonials").post((req, res) => {
 });
 
 router.route("/testimonials/:id").put((req, res) => {
-  db.testimonials.forEach((ob) => {
-    const id = req.params.id;
-    if (ob.id == id) {
+  const id = req.params.id;
+  const changedDb = [];
+  let isChanged = false;
+  db.testimonials.forEach((testimonial) => {
+    if (testimonial.id == id) {
       const { author, text } = req.body;
-      ob = { id, author, text };
-      return res.send("changed");
+      testimonial = { id, author, text };
+      isChanged = true;
     }
+    changedDb.push(testimonial);
   });
-  return res.send("There is no such id element");
+  db.testimonials = changedDb;
+  isChanged ? res.send("changed") : res.send("There is no such id element");
 });
 
 router.route("/testimonials/:id").delete((req, res) => {
   const testimonials_start = db.testimonials.length;
-  db.testimonials.filter((item) => item.id != req.params.id);
+  db.testimonials = db.testimonials.filter((item) => item.id != req.params.id);
   if (db.testimonials.length < testimonials_start) {
     res.send("deleted");
   } else {

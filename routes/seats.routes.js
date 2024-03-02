@@ -6,13 +6,12 @@ const { v4: uuidv4 } = require("uuid");
 // seats
 
 router.route("/seats/:id").get((req, res) => {
-  db.seats.forEach((ob) => {
-    if (ob.id == req.params.id) {
-      return res.json(ob);
-    } else {
-      return res.send("There is no such id element");
-    }
-  });
+  const db2 = db.seats.filter((item) => item.id == req.params.id);
+  if (db2.length > 0) {
+    res.json(db2);
+  } else {
+    res.send("There is no such id element");
+  }
 });
 
 router.route("/seats").get((req, res) => {
@@ -27,20 +26,24 @@ router.route("/seats").post((req, res) => {
 });
 
 router.route("/seats/:id").put((req, res) => {
-  db.seats.forEach((ob) => {
-    const id = req.params.id;
-    if (ob.id == id) {
+  const id = req.params.id;
+  const changedDb = [];
+  let isChanged = false;
+  db.seats.forEach((seat) => {
+    if (seat.id == id) {
       const { day, seat, client, email } = req.body;
-      ob = { id, day, seat, client, email };
-      return res.send("changed");
+      seat = { id, day, seat, client, email };
+      isChanged = true;
     }
+    changedDb.push(seat);
   });
-  return res.send("There is no such id element");
+  db.seats = changedDb;
+  isChanged ? res.send("changed") : res.send("There is no such id element");
 });
 
 router.route("/seats/:id").delete((req, res) => {
   const seats_start = db.seats.length;
-  db.seats.filter((item) => item.id != req.params.id);
+  db.seats = db.seats.filter((item) => item.id != req.params.id);
   if (db.seats.length < seats_start) {
     res.send("deleted");
   } else {
