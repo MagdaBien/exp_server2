@@ -6,15 +6,13 @@ const { v4: uuidv4 } = require("uuid");
 // concerts
 
 router.route("/concerts/:id").get((req, res) => {
-  const id = req.params.id;
-  const found = db.concerts.find((element) => element.id == id);
-  if (found != undefined) {
-    db.concerts.forEach((ob) => {
-      if (ob.id == req.params.id) return res.json(ob);
-    });
-  } else {
-    res.send("There is no such id element");
-  }
+  db.concerts.forEach((ob) => {
+    if (ob.id == req.params.id) {
+      return res.json(ob);
+    } else {
+      return res.send("There is no such id element");
+    }
+  });
 });
 
 router.route("/concerts").get((req, res) => {
@@ -29,24 +27,21 @@ router.route("/concerts").post((req, res) => {
 });
 
 router.route("/concerts/:id").put((req, res) => {
-  const id = req.params.id;
-  const found = db.concerts.find((element) => element.id == id);
-  if (found != undefined) {
-    const { performer, genre, price, day, image } = req.body;
-    db.concerts = db.concerts.map((ob) =>
-      ob.id == id ? { id, performer, genre, price, day, image } : ob
-    );
-    res.send("changed");
-  } else {
-    res.send("There is no such id element");
-  }
+  db.concerts.forEach((ob) => {
+    const id = req.params.id;
+    if (ob.id == id) {
+      const { performer, genre, price, day, image } = req.body;
+      ob = { id, performer, genre, price, day, image };
+      return res.send("changed");
+    }
+  });
+  return res.send("There is no such id element");
 });
 
 router.route("/concerts/:id").delete((req, res) => {
-  const id = req.params.id;
-  const found = db.concerts.find((element) => element.id == id);
-  if (found != undefined) {
-    db.concerts = db.concerts.filter((ob) => ob.id != req.params.id);
+  const concerts_start = db.concerts.length;
+  db.concerts.filter((item) => item.id != req.params.id);
+  if (db.concerts.length < concerts_start) {
     res.send("deleted");
   } else {
     res.send("There is no such id element");

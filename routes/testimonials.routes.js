@@ -6,20 +6,18 @@ const { v4: uuidv4 } = require("uuid");
 // testimonials
 
 router.route("/testimonials/random").get((req, res) => {
-  const los = Math.floor(Math.random() * db.testimonials.length);
-  res.json(db.testimonials[los]);
+  const randomIndex = Math.floor(Math.random() * db.testimonials.length);
+  res.json(db.testimonials[randomIndex]);
 });
 
 router.route("/testimonials/:id").get((req, res) => {
-  const id = req.params.id;
-  const found = db.testimonials.find((element) => element.id == id);
-  if (found != undefined) {
-    db.testimonials.forEach((ob) => {
-      if (ob.id == req.params.id) return res.json(ob);
-    });
-  } else {
-    res.send("There is no such id element");
-  }
+  db.testimonials.forEach((ob) => {
+    if (ob.id == req.params.id) {
+      return res.json(ob);
+    } else {
+      return res.send("There is no such id element");
+    }
+  });
 });
 
 router.route("/testimonials").get((req, res) => {
@@ -34,24 +32,21 @@ router.route("/testimonials").post((req, res) => {
 });
 
 router.route("/testimonials/:id").put((req, res) => {
-  const id = req.params.id;
-  const found = db.testimonials.find((element) => element.id == id);
-  if (found != undefined) {
-    const { author, text } = req.body;
-    db.testimonials = db.testimonials.map((ob) =>
-      ob.id == id ? { id, author, text } : ob
-    );
-    res.send("changed");
-  } else {
-    res.send("There is no such id element");
-  }
+  db.testimonials.forEach((ob) => {
+    const id = req.params.id;
+    if (ob.id == id) {
+      const { author, text } = req.body;
+      ob = { id, author, text };
+      return res.send("changed");
+    }
+  });
+  return res.send("There is no such id element");
 });
 
 router.route("/testimonials/:id").delete((req, res) => {
-  const id = req.params.id;
-  const found = db.testimonials.find((element) => element.id == id);
-  if (found != undefined) {
-    db.testimonials = db.testimonials.filter((ob) => ob.id != req.params.id);
+  const testimonials_start = db.testimonials.length;
+  db.testimonials.filter((item) => item.id != req.params.id);
+  if (db.testimonials.length < testimonials_start) {
     res.send("deleted");
   } else {
     res.send("There is no such id element");
