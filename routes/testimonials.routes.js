@@ -11,8 +11,8 @@ router.route("/testimonials/random").get((req, res) => {
 });
 
 router.route("/testimonials/:id").get((req, res) => {
-  const db2 = db.testimonials.filter((item) => item.id == req.params.id);
-  if (db2.length > 0) {
+  const db2 = db.testimonials.find((item) => item.id == req.params.id);
+  if (db2) {
     res.json(db2);
   } else {
     res.send("There is no such id element");
@@ -32,24 +32,24 @@ router.route("/testimonials").post((req, res) => {
 
 router.route("/testimonials/:id").put((req, res) => {
   const id = req.params.id;
-  const changedDb = [];
-  let isChanged = false;
-  db.testimonials.forEach((testimonial) => {
-    if (testimonial.id == id) {
-      const { author, text } = req.body;
-      testimonial = { id, author, text };
-      isChanged = true;
-    }
-    changedDb.push(testimonial);
-  });
-  db.testimonials = changedDb;
-  isChanged ? res.send("changed") : res.send("There is no such id element");
+  const testimonialIndex = db.testimonials.findIndex(
+    (testimonial) => testimonial.id == id
+  );
+  if (testimonialIndex) {
+    const { author, text } = req.body;
+    db.testimonials[testimonialIndex] = { id, author, text };
+    res.send("changed");
+  } else {
+    res.send("There is no such id element");
+  }
 });
 
 router.route("/testimonials/:id").delete((req, res) => {
-  const testimonials_start = db.testimonials.length;
-  db.testimonials = db.testimonials.filter((item) => item.id != req.params.id);
-  if (db.testimonials.length < testimonials_start) {
+  const testimonialIndex = db.testimonials.findIndex(
+    (testimonial) => testimonial.id == req.params.id
+  );
+  if (testimonialIndex) {
+    db.testimonials.splice(testimonialIndex, 1);
     res.send("deleted");
   } else {
     res.send("There is no such id element");
