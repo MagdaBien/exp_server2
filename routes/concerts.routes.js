@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 // concerts
 
 router.route("/concerts/:id").get((req, res) => {
-  const db2 = db.concerts.find((item) => item.id == req.params.id);
+  const db2 = db.concerts.find((concert) => concert.id == req.params.id);
   if (db2) {
     res.json(db2);
   } else {

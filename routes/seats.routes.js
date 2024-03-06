@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 // seats
 
 router.route("/seats/:id").get((req, res) => {
-  const db2 = db.seats.find((item) => item.id == req.params.id);
+  const db2 = db.seats.find((seat) => seat.id == req.params.id);
   if (db2) {
     res.json(db2);
   } else {
