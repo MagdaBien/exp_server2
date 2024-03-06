@@ -11,11 +11,11 @@ router.route("/testimonials/random").get((req, res) => {
 });
 
 router.route("/testimonials/:id").get((req, res) => {
-  const db2 = db.testimonials.find(
+  const selectedTestimonial = db.testimonials.find(
     (testimonial) => testimonial.id == req.params.id
   );
-  if (db2) {
-    res.json(db2);
+  if (selectedTestimonial) {
+    res.json(selectedTestimonial);
   } else {
     res.send("There is no such id element");
   }

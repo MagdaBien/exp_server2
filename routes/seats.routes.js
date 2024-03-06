@@ -6,9 +6,9 @@ const { v4: uuidv4 } = require("uuid");
 // seats
 
 router.route("/seats/:id").get((req, res) => {
-  const db2 = db.seats.find((seat) => seat.id == req.params.id);
-  if (db2) {
-    res.json(db2);
+  const selectedSeat = db.seats.find((seat) => seat.id == req.params.id);
+  if (selectedSeat) {
+    res.json(selectedSeat);
   } else {
     res.send("There is no such id element");
   }

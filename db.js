@@ -81,7 +81,7 @@ const db = {
     {
       id: "1",
       day: 1,
-      seat: 5,
+      seat: 3,
       client: "Amanda Doe",
       email: "amandadoe@example.com",
     },
