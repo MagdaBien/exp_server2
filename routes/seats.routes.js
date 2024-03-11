@@ -5,6 +5,12 @@ const { v4: uuidv4 } = require("uuid");
 
 // seats
 
+const checkIsSeatTaken = (chosenSeat, chosenDay) => {
+  return db.seats.some(
+    (seat) => seat.seat === Number(chosenSeat) && seat.day === Number(chosenDay)
+  );
+};
+
 router.route("/seats/:id").get((req, res) => {
   const selectedSeat = db.seats.find((seat) => seat.id == req.params.id);
   if (selectedSeat) {
@@ -20,9 +26,15 @@ router.route("/seats").get((req, res) => {
 
 router.route("/seats").post((req, res) => {
   const { day, seat, client, email } = req.body;
-  const id = uuidv4();
-  db.seats.push({ id, day, seat, client, email });
-  res.send("added");
+  const isSeatTaken = checkIsSeatTaken(seat, day);
+  //res.send("isSeatTaken: " + isSeatTaken);
+  if (isSeatTaken) {
+    res.send("The slot is already taken...");
+  } else {
+    const id = uuidv4();
+    db.seats.push({ id, day: Number(day), seat: Number(seat), client, email });
+    res.send("added");
+  }
 });
 
 router.route("/seats/:id").put((req, res) => {
