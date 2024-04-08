@@ -1,0 +1,8 @@
+[
+  { "day": 1, "seat": 3, "client": "6612ef18b3045fc45ba32535" },
+  { "day": 1, "seat": 9, "client": "6612ef18b3045fc45ba32536"  },
+  { "day": 3, "seat": 10, "client": "6612ef18b3045fc45ba32537"  },
+  { "day": 1, "seat": 26, "client": "6612ef18b3045fc45ba32538"  },
+  { "day": 2, "seat": 1, "client": "6612ef18b3045fc45ba32537"  },
+  { "day": 2, "seat": 2, "client": "6612ef18b3045fc45ba3253a"  }
+]
