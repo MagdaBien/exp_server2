@@ -26,9 +26,9 @@ exports.getAll = async (req, res) => {
 
 exports.getById = async (req, res) => {
   try {
-    const dep = await Seat.findById(req.params.id);
-    if (!dep) res.status(404).json({ message: "Not found" });
-    else res.json(dep);
+    const foundSeat = await Seat.findById(req.params.id);
+    if (!foundSeat) res.status(404).json({ message: "Not found" });
+    else res.json(foundSeat);
   } catch (err) {
     res.status(502).json({ message: err });
   }
@@ -56,13 +56,13 @@ exports.addOne = async (req, res) => {
 exports.updateOne = async (req, res) => {
   const { day, seat, client } = req.body;
   try {
-    const dep = await Seat.findOneAndUpdate(
+    const foundSeat = await Seat.findOneAndUpdate(
       { _id: req.params.id },
       { $set: { day, seat, client } },
       { returnDocument: "after" }
     );
-    if (dep) {
-      res.json(dep);
+    if (foundSeat) {
+      res.json(foundSeat);
     } else res.status(404).json({ message: "Not found..." });
   } catch (err) {
     res.status(504).json({ message: err });
@@ -71,9 +71,9 @@ exports.updateOne = async (req, res) => {
 
 exports.deleteOne = async (req, res) => {
   try {
-    const dep = await Seat.findOneAndDelete({ _id: req.params.id });
-    if (dep) {
-      res.json(dep);
+    const foundSeat = await Seat.findOneAndDelete({ _id: req.params.id });
+    if (foundSeat) {
+      res.json(foundSeat);
     } else res.status(404).json({ message: "Not found..." });
   } catch (err) {
     res.status(505).json({ message: err });

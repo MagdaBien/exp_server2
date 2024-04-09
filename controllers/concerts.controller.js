@@ -10,9 +10,9 @@ exports.getAll = async (req, res) => {
 
 exports.getById = async (req, res) => {
   try {
-    const dep = await Concert.findById(req.params.id);
-    if (!dep) res.status(404).json({ message: "Not found" });
-    else res.json(dep);
+    const foundConcert = await Concert.findById(req.params.id);
+    if (!foundConcert) res.status(404).json({ message: "Not found" });
+    else res.json(foundConcert);
   } catch (err) {
     res.status(500).json({ message: err });
   }
@@ -33,13 +33,13 @@ exports.updateOne = async (req, res) => {
   const { performer, genre, price, day, image } = req.body;
 
   try {
-    const dep = await Concert.findOneAndUpdate(
+    const foundConcert = await Concert.findOneAndUpdate(
       { _id: req.params.id },
       { $set: { performer, genre, price, day, image } },
       { returnDocument: "after" }
     );
-    if (dep) {
-      res.json(dep);
+    if (foundConcert) {
+      res.json(foundConcert);
     } else res.status(404).json({ message: "Not found..." });
   } catch (err) {
     res.status(500).json({ message: err });
@@ -48,9 +48,9 @@ exports.updateOne = async (req, res) => {
 
 exports.deleteOne = async (req, res) => {
   try {
-    const dep = await Concert.findOneAndDelete({ _id: req.params.id });
-    if (dep) {
-      res.json(dep);
+    const foundConcert = await Concert.findOneAndDelete({ _id: req.params.id });
+    if (foundConcert) {
+      res.json(foundConcert);
     } else res.status(404).json({ message: "Not found..." });
   } catch (err) {
     res.status(500).json({ message: err });
