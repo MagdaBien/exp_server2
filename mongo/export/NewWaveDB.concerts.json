@@ -1,0 +1,30 @@
+[{
+  "_id": {
+    "$oid": "6612ee0fb3045fc45ba32531"
+  },
+  "performer": "John Doe",
+  "genre": "Heavy Rock",
+  "price": 25,
+  "day": 1,
+  "image": "/img/uploads/1fsd324fsdg.jpg"
+},
+{
+  "_id": {
+    "$oid": "6612ee0fb3045fc45ba32532"
+  },
+  "performer": "Rebekah Parker",
+  "genre": "R&B",
+  "price": 25,
+  "day": 2,
+  "image": "/img/uploads/2f342s4fsdg.jpg"
+},
+{
+  "_id": {
+    "$oid": "6612ee0fb3045fc45ba32533"
+  },
+  "performer": "Maybell Haley",
+  "genre": "Pop",
+  "price": 40,
+  "day": 3,
+  "image": "/img/uploads/hdfh42sd213.jpg"
+}]
