@@ -1,7 +1,7 @@
-import { Container } from 'reactstrap';
+import { Container } from "reactstrap";
 
-import PromoCarousel from './../../features/PromoCarousel/PromoCarousel';
-import Lineup from './../../features/Lineup/Lineup';
+import PromoCarousel from "./../../features/PromoCarousel/PromoCarousel";
+import Lineup from "./../../features/Lineup/Lineup";
 
 const HomePage = () => (
   <div>

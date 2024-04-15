@@ -52,6 +52,17 @@
       bottom: 1rem;
       left: 1.5rem;
     }
+
+    &__tickets {
+      opacity: 0.8;
+      margin: 0.5rem;
+      font-size: 0.9rem;
+      z-index: 2;
+      position: absolute;
+      bottom: 3rem;
+      left: 1.5rem;
+    }
+
   
   }
 
@@ -71,7 +82,11 @@
   &:hover .concert__image-container__img {
     transform: scale(1.1);
   }
+
+
 }
+
+
 
 @media (max-width: 768px) {
 

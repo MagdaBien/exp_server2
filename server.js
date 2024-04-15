@@ -41,17 +41,16 @@ app.use((req, res) => {
   res.send("error 404");
 });
 
-// connects our backend code with the database
-/*
-mongoose.connect("mongodb://0.0.0.0:27017/NewWaveDB", {
-}); */
-mongoose.connect(
-  "mongodb+srv://magbie1978:lMLKTw4zLquWgbp3@cluster0.ut7tgmr.mongodb.net/NewWaveDB?retryWrites=true&w=majority&appName=Cluster0",
-  {
-    useNewUrlParser: true,
-  }
-);
+const NODE_ENV = process.env.NODE_ENV;
+let dbUri = "";
 
+if (NODE_ENV === "production")
+  dbUri =
+    "mongodb+srv://magbie1978:lMLKTw4zLquWgbp3@cluster0.ut7tgmr.mongodb.net/NewWaveDB?retryWrites=true&w=majority&appName=Cluster0";
+else if (NODE_ENV === "test") dbUri = "mongodb://localhost:27017/NewWaveDBtest";
+else dbUri = "mongodb://localhost:27017/NewWaveDB";
+
+mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
 db.once("open", () => {
@@ -66,3 +65,5 @@ io.on("connection", (socket) => {
     //console.log("Oh, socket " + socket.id + " has left");
   });
 });
+
+module.exports = server;

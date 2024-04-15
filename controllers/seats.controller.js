@@ -2,9 +2,10 @@ const Seat = require("../models/seat.model");
 //const Client = require("../models/client.model");
 const socket = require("socket.io");
 
-const checkIsSeatTaken = (chosenSeat, chosenDay) => {
+const checkIsSeatTaken = (chosenSeat, chosenConcert) => {
+  //console.log("chosenSeat, chosenConcert: ", chosenSeat, chosenConcert);
   return Seat.findOne({
-    $and: [{ seat: Number(chosenSeat) }, { day: Number(chosenDay) }],
+    $and: [{ seat: Number(chosenSeat) }, { concert: chosenConcert }],
   });
 };
 
@@ -35,15 +36,15 @@ exports.getById = async (req, res) => {
 };
 
 exports.addOne = async (req, res) => {
-  const { day, seat, client, email } = req.body;
-  const isSeatTaken = await checkIsSeatTaken(seat, day);
+  const { concert, seat, client, email } = req.body;
+  const isSeatTaken = await checkIsSeatTaken(seat, concert);
   //const isClientExists = await findClientByData(client, email);
 
   if (isSeatTaken) {
     res.send("The slot is already taken...");
   } else {
     try {
-      const newSeat = new Seat({ day, seat, client, email });
+      const newSeat = new Seat({ concert, seat, client, email });
       await newSeat.save();
       req.io.emit("seatsUpdated", await Seat.find());
       res.send("added");

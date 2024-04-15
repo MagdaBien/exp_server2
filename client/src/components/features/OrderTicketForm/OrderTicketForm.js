@@ -28,7 +28,8 @@ const OrderTicketForm = () => {
   const [order, setOrder] = useState({
     client: "",
     email: "",
-    day: 1,
+    //day: 1,
+    concert: "6612ee0fb3045fc45ba32531",
     seat: "",
   });
   const [isError, setIsError] = useState(false);
@@ -45,19 +46,20 @@ const OrderTicketForm = () => {
 
   const updateNumberField = ({ target }) => {
     const { value, name } = target;
-    setOrder({ ...order, [name]: parseInt(value) });
+    setOrder({ ...order, [name]: value });
   };
 
   const submitForm = async (e) => {
     e.preventDefault();
 
-    if (order.client && order.email && order.day && order.seat) {
+    if (order.client && order.email && order.concert && order.seat) {
       await dispatch(addSeatRequest(order));
       dispatch(loadSeatsRequest());
       setOrder({
         client: "",
         email: "",
-        day: order.day,
+        //day: order.day,
+        concert: order.concert,
         seat: "",
       });
       setIsError(false);
@@ -112,18 +114,18 @@ const OrderTicketForm = () => {
           </FormGroup>
           <FormGroup>
             <Label for="clientDay">
-              Select which day of festivals are you interested in:
+              Select which concert are you interested in:
             </Label>
             <Input
               type="select"
-              value={order.day}
-              name="day"
+              value={order.concert}
+              name="concert"
               onChange={updateNumberField}
               id="exampleSelect"
             >
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
+              <option value="6612ee0fb3045fc45ba32531">John Doe</option>
+              <option value="6612ee0fb3045fc45ba32532">Rebekah Parker</option>
+              <option value="6612ee0fb3045fc45ba32533">Maybell Haley</option>
             </Input>
             <small id="dayHelp" className="form-text text-muted">
               Every day of the festival uses individual ticket. You can book
@@ -143,7 +145,7 @@ const OrderTicketForm = () => {
         </Col>
         <Col xs="12" md="6">
           <SeatChooser
-            chosenDay={order.day}
+            chosenConcert={order.concert}
             chosenSeat={order.seat}
             updateSeat={updateSeat}
           />

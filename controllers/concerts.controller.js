@@ -1,11 +1,33 @@
 const Concert = require("../models/concert.model");
+const Seat = require("../models/seat.model");
 
 exports.getAll = async (req, res) => {
   try {
-    res.json(await Concert.find());
+    const concertsAll = await Concert.find();
+    const seatsAll = await Seat.find();
+    const concertsWithTickets = concertsAll.map((oneConcert) => {
+      return {
+        _id: oneConcert._id,
+        performer: oneConcert.performer,
+        genre: oneConcert.genre,
+        price: oneConcert.price,
+        day: oneConcert.day,
+        image: oneConcert.image,
+        ticketLeft: 50 - getSeatsByConcertId(seatsAll, oneConcert._id).length,
+      };
+    });
+    //console.log(concertsWithTickets);
+    res.json(concertsWithTickets);
   } catch (err) {
     res.status(500).json({ message: err });
   }
+};
+
+const getSeatsByConcertId = (seats, concertId) => {
+  const filteredSeats = seats.filter(
+    (seat) => seat.concert === concertId.toString()
+  );
+  return filteredSeats;
 };
 
 exports.getById = async (req, res) => {

@@ -12,14 +12,14 @@ import "./SeatChooser.scss";
 //import { useState } from "react";
 import io from "socket.io-client";
 
-const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
+const SeatChooser = ({ chosenConcert, chosenSeat, updateSeat }) => {
   const dispatch = useDispatch();
   const seats = useSelector(getSeats);
   const requests = useSelector(getRequests);
 
   const [socket, setSocket] = useState();
   const [amountSeatsTaken, setAmountSeatsTaken] = useState(
-    seats.filter((seat) => seat.day === chosenDay).length
+    seats.filter((seat) => seat.concert === chosenConcert).length
   );
 
   useEffect(() => {
@@ -37,11 +37,15 @@ const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
   }, []);
 
   useEffect(() => {
-    setAmountSeatsTaken(seats.filter((seat) => seat.day === chosenDay).length);
-  }, [seats, chosenDay]);
+    setAmountSeatsTaken(
+      seats.filter((seat) => seat.concert === chosenConcert).length
+    );
+  }, [seats, chosenConcert]);
 
   const isTaken = (seatId) => {
-    return seats.some((item) => item.seat === seatId && item.day === chosenDay);
+    return seats.some(
+      (item) => item.seat === seatId && item.concert === chosenConcert
+    );
   };
 
   const prepareSeat = (seatId) => {
