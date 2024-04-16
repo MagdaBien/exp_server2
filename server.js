@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const helmet = require("helmet");
 
 const testimonialsRoutes = require("./routes/testimonials.routes");
 const concertsRoutes = require("./routes/concerts.routes");
@@ -14,6 +15,7 @@ const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(helmet());
 
 const server = app.listen(8000, () => {
   console.log("Server is running on port: 8000");
@@ -46,7 +48,7 @@ let dbUri = "";
 
 if (NODE_ENV === "production")
   dbUri =
-    "mongodb+srv://magbie1978:lMLKTw4zLquWgbp3@cluster0.ut7tgmr.mongodb.net/NewWaveDB?retryWrites=true&w=majority&appName=Cluster0";
+    "mongodb+srv://magbie1978:${process.env.DB_PASS}@cluster0.ut7tgmr.mongodb.net/NewWaveDB?retryWrites=true&w=majority&appName=Cluster0";
 else if (NODE_ENV === "test") dbUri = "mongodb://localhost:27017/NewWaveDBtest";
 else dbUri = "mongodb://localhost:27017/NewWaveDB";
 

@@ -1,6 +1,7 @@
 const Seat = require("../models/seat.model");
 //const Client = require("../models/client.model");
 const socket = require("socket.io");
+const sanitize = require("mongo-sanitize");
 
 const checkIsSeatTaken = (chosenSeat, chosenConcert) => {
   //console.log("chosenSeat, chosenConcert: ", chosenSeat, chosenConcert);
@@ -37,6 +38,8 @@ exports.getById = async (req, res) => {
 
 exports.addOne = async (req, res) => {
   const { concert, seat, client, email } = req.body;
+  const cleanClient = sanitize(client);
+  const cleanEmail = sanitize(email);
   const isSeatTaken = await checkIsSeatTaken(seat, concert);
   //const isClientExists = await findClientByData(client, email);
 
@@ -44,7 +47,12 @@ exports.addOne = async (req, res) => {
     res.send("The slot is already taken...");
   } else {
     try {
-      const newSeat = new Seat({ concert, seat, client, email });
+      const newSeat = new Seat({
+        concert,
+        seat,
+        client: cleanClient,
+        email: cleanEmail,
+      });
       await newSeat.save();
       req.io.emit("seatsUpdated", await Seat.find());
       res.send("added");
